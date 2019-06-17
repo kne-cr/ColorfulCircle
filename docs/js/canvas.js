@@ -60,7 +60,7 @@
 
   const draw = (ctx, pointer) => {
     ctx.beginPath();
-    const r = duration_time() / 10;
+    const r = duration_time() / 4;
     ctx.arc(pointer.x, pointer.y, r, 0, Math.PI * 2, false);
     ctx.fill();
   }
