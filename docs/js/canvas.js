@@ -5,6 +5,7 @@
   canvas.width = main.clientWidth;
 
   const mousedown_canvas = (e) => {
+    if(e.type === "touchstart") e.preventDefault();
     performance.mark("click_start");
   }
   
@@ -28,11 +29,27 @@
     return `rgb(${r}, ${g}, ${b})`;
   }
 
-  const get_pointer = (e) => {
+  const get_pointer_pc = (e) => {
     const rect = e.target.getBoundingClientRect();
     const x = e.clientX - Math.floor(rect.left);
     const y = e.clientY - Math.floor(rect.top);
     return {"x": x, "y": y};
+  }
+
+  const get_pointer_sp = (e) => {
+    const touchObject = event.changedTouches[0];
+    const x = touchObject.pageX;
+    const y = touchObject.pageY;
+    return {"x": x, "y": y};
+  }
+
+  const get_pointer = (e) => {
+    if(e.type === "touchend") {
+      e.preventDefault();
+      return get_pointer_sp(e);
+    } else {
+      return get_pointer_pc(e);
+    }
   }
 
   const change_color = (ctx) => {
@@ -55,7 +72,7 @@
   }
 
   canvas.addEventListener("mousedown", mousedown_canvas);
-  canvas.addEventListener("touchstart", mousedown_canvas, {passive: true});
+  canvas.addEventListener("touchstart", mousedown_canvas, {passive: false});
   canvas.addEventListener("mouseup", mouseup_canvas);
-  canvas.addEventListener("touchend", mouseup_canvas, {passive: true});
+  canvas.addEventListener("touchend", mouseup_canvas, {passive: false});
 })();
